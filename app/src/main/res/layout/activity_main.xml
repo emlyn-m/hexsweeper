@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MenuActivity">
+
+    <ImageView
+        android:id="@+id/logoIV"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_margin="75dp"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias=".1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/titleTV"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="HEXsweeper"
+        android:fontFamily="@font/modern_sans"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="@+id/logoIV"
+        app:layout_constraintEnd_toEndOf="@+id/logoIV"
+        app:layout_constraintTop_toBottomOf="@+id/logoIV"
+        tools:ignore="HardcodedText,SpUsage" />
+
+    <SeekBar
+        android:id="@+id/numHexSB"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/numHexTV"
+        app:layout_constraintEnd_toStartOf="@+id/numHexTV"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/numHexTV" />
+
+    <TextView
+        android:id="@+id/numHexTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 SPOTS"
+        android:textSize="20dp"
+        android:fontFamily="@font/modern_sans"
+        android:textColor="@color/white"
+        android:layout_marginEnd="75dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/titleTV"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <SeekBar
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="75dp"
+        app:layout_constraintBottom_toBottomOf="@+id/numMinesTV"
+        app:layout_constraintEnd_toEndOf="@+id/numHexSB"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/numMinesTV" />
+
+    <TextView
+        android:id="@+id/numMinesTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5 MINES"
+        android:textSize="20dp"
+        android:fontFamily="@font/modern_sans"
+        android:textColor="@color/white"
+        android:layout_marginEnd="75dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/numHexTV"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/beginTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BEGIN"
+        android:textSize="50dp"
+        android:textColor="@color/green"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAlignment="center"
+        android:fontFamily="@font/modern_sans"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numMinesTV"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:srcCompat="@drawable/corner_bg"
+        android:scaleType="fitXY"
+        android:translationY="5dp"
+        app:layout_constraintTop_toTopOf="@+id/beginTV"
+        app:layout_constraintBottom_toBottomOf="@+id/beginTV"
+        app:layout_constraintStart_toStartOf="@+id/beginTV"
+        app:layout_constraintEnd_toEndOf="@+id/beginTV" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

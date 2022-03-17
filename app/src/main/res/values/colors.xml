@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="green">#FF50f2bc</color>
+
+<!--    &lt;!&ndash; MINE COLORS &ndash;&gt;-->
+<!--    <color name="mine_1">BLUE</color>-->
+<!--    <color name="mine_2">GREEN</color>-->
+<!--    <color name="mine_3">RED</color>-->
+<!--    <color name="mine_4">PURPLE</color>-->
+<!--    <color name="mine_5">BURGANDY</color>-->
+<!--    <color name="mine_6">TEAL</color>-->
+</resources>
