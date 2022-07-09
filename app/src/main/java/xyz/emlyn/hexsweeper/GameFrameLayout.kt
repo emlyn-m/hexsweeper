@@ -371,10 +371,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             if (nodes[i].flag) {
                 hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexagon_border_flag))
             }
-            if (nodes[i].ucMine) {
-                hexIV.setImageDrawable(ContextCompat.getDrawable(context,
-                    R.drawable.ic_hexsweep_logo)) //TODO: BEtter icon
-            }
 
 
             val hexIVLP = LayoutParams((nodes[i].width * scaleFactor).toInt(), (nodes[i].height * scaleFactor).toInt())
@@ -382,6 +378,10 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
             hexIV.layoutParams = hexIVLP
             addView(hexIV)
+
+            if (nodes[i].ucMine && nodes[i].mine) {
+                hexIV.setImageResource(R.drawable.hex_mine)
+            }
 
             if (nodes[i].mineNeighbourCount != null) {
 
