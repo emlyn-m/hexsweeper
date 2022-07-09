@@ -207,6 +207,8 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         val tappedNode = getTappedNode(Triple(event.x,event.y,event.downTime)) ?: return;
         //"elvis operator" - Some invalid position
 
+        firstClick = false
+
         if (tappedNode.mine && !tappedNode.flag) {
 
             if (firstClick) {  // Cannot die on first click
@@ -217,9 +219,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
                 } while (!nextNode!!.mine)
                 nextNode.mine = true
                 tappedNode.mine = false
-                firstClick = false
-
-                Log.d(debugTag, "hehe")
 
                 return triggerTap(event)
             }

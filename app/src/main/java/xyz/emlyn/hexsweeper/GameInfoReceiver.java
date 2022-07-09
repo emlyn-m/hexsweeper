@@ -66,7 +66,9 @@ public class GameInfoReceiver extends BroadcastReceiver {
                         lossOverlayCL.findViewById(R.id.overlayBackground).setBackgroundColor(context.getColor(R.color.loss_overlay));
                 ((TextView) lossOverlayCL.findViewById(R.id.gameEndState)).setText(context.getString(R.string.loss));
 
-                fullScreenLayout.addView(lossOverlayCL);
+                try {
+                    fullScreenLayout.addView(lossOverlayCL);
+                } catch (Exception ignored) { break; }
 
                 ValueAnimator lossOpacityAnim = ValueAnimator.ofFloat(0, 1);
                 lossOpacityAnim.setDuration(500); //ms
