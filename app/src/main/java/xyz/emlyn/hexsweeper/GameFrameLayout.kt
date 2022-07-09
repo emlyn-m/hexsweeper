@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.widget.FrameLayout
@@ -26,6 +27,10 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
     lateinit var nodes : List<HexNode>
     var numRings = 0
+
+    var gameOver = false
+    var killed = false
+    private fun isKilled() : Boolean { return killed }
 
     private var fingerPos : ArrayList<Triple<Float, Float, Long>> = ArrayList() // [(posX, posY, ms)]
     
@@ -57,59 +62,64 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
 
-        return when (event!!.action and MotionEvent.ACTION_MASK) {
-            MotionEvent.ACTION_DOWN -> {
-                //First finger down
-                addFinger(event)
+        if (gameOver) {
+            return super.onTouchEvent(event)
+        } else {
 
-                val fingerDown = fingerPos[0]
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (fingerPos.size != 0) {
-                        if (fingerPos[0] == fingerDown) {
-                            triggerLongTap(fingerPos[0])
-                            fingerPos.add(Triple(-555.0f,
-                                -555.0f,
-                                99999L)) //prevent re-tap again by setting bullshit time/pos
-                            fingerPos.remove(fingerPos[0])
-                            killChildren()
-                            drawHex()
-                        }
-                    }
-                }, android.view.ViewConfiguration.getLongPressTimeout().toLong())
-
-                true
-            }
-            MotionEvent.ACTION_POINTER_DOWN -> {
-                //second finger down
-                if (fingerPos.size == 1) {
+            return when (event!!.action and MotionEvent.ACTION_MASK) {
+                MotionEvent.ACTION_DOWN -> {
+                    //First finger down
                     addFinger(event)
+
+                    val fingerDown = fingerPos[0]
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        if (fingerPos.size != 0) {
+                            if (fingerPos[0] == fingerDown) {
+                                triggerLongTap(fingerPos[0])
+                                fingerPos.add(Triple(-555.0f,
+                                    -555.0f,
+                                    99999L)) //prevent re-tap again by setting bullshit time/pos
+                                fingerPos.remove(fingerPos[0])
+                                killChildren()
+                                drawHex()
+                            }
+                        }
+                    }, android.view.ViewConfiguration.getLongPressTimeout().toLong())
+
+                    true
                 }
-                true
-            }
-            MotionEvent.ACTION_MOVE -> {
-
-                if (fingerPos.size == 1) {
-                    moveWindow(event)
-                } else if (fingerPos.size == 2) {
-                    scaleWindow(event)
+                MotionEvent.ACTION_POINTER_DOWN -> {
+                    //second finger down
+                    if (fingerPos.size == 1) {
+                        addFinger(event)
+                    }
+                    true
                 }
-                true
-            }
-            MotionEvent.ACTION_POINTER_UP -> {
+                MotionEvent.ACTION_MOVE -> {
 
-                fingerPos.remove(fingerPos[1])
-                true
-            }
-            MotionEvent.ACTION_UP -> {
-
-                if (System.currentTimeMillis() - fingerPos[0].third < TAP_THRESHOLD_MS) {
-                    triggerTap(event)
+                    if (fingerPos.size == 1) {
+                        moveWindow(event)
+                    } else if (fingerPos.size == 2) {
+                        scaleWindow(event)
+                    }
+                    true
                 }
+                MotionEvent.ACTION_POINTER_UP -> {
 
-                fingerPos.remove(fingerPos[0])
-                true
+                    fingerPos.remove(fingerPos[1])
+                    true
+                }
+                MotionEvent.ACTION_UP -> {
+
+                    if (System.currentTimeMillis() - fingerPos[0].third < TAP_THRESHOLD_MS) {
+                        triggerTap(event)
+                    }
+
+                    fingerPos.remove(fingerPos[0])
+                    true
+                }
+                else -> super.onTouchEvent(event)
             }
-            else -> super.onTouchEvent(event)
         }
     }
 
@@ -138,15 +148,17 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         return Pair(q.toInt(), r.toInt())
     }
 
-    private fun uncover(node : HexNode, numCounted : Int) : Int {
+    private fun uncover(node: HexNode): Int {
 
 
-        if (node.mineNeighbourCount != null || node.mine || node.flag) {
-            return numCounted //Already handled OR mine
+        if (node.mineNeighbourCount != null) {
+            return 0 //Already handled OR mine
+        } else if (node.mine || node.flag) {
+            return 0
         }
 
         node.mineNeighbourCount = 0
-        var newNumCounted = numCounted
+        var nCounted = 0
 
         for (neighbour in node.neighbours) {
             if (neighbour.mine) {
@@ -156,13 +168,14 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
         if (node.mineNeighbourCount!! == 0) {
             for (neighbour in node.neighbours) {
+
                 if (!(neighbour.mine || neighbour.flag)) {
-                    uncover(neighbour, newNumCounted+1)
+                    nCounted += uncover(neighbour)
                 }
             }
         }
 
-        return newNumCounted
+        return nCounted + 1
     }
 
     private fun getTappedNode(event: Triple<Float, Float, Long>) : HexNode? {
@@ -192,17 +205,64 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         //"elvis operator" - Some invalid position
 
         if (tappedNode.mine && !tappedNode.flag) {
-            //TODO: Apply mine image to all not-uncovered mines (.1s between each)
+            gameOver = true
 
-            Intent().also { intent ->
-                intent.action = "xyz.emlyn.hexsweeper.GAME_LOSS"
-                context.sendBroadcast(intent)
+            var currMineIdx = -1
+            fun incCurrMineIdx() { currMineIdx++ }
+            fun getCurrMineIdx(): Int { return currMineIdx }
+
+            var screenShown = false
+            fun activate(): Boolean {
+                if (screenShown) { return false }
+                else { screenShown = true; return true }
             }
+
+            val randomizedMines = nodes.shuffled()
+
+            val showMineHandler = Handler(Looper.getMainLooper())
+            var showMineRunnable = Runnable {}
+            showMineRunnable = Runnable {
+
+                if (!isKilled()) {
+
+                    killChildren()
+                    drawHex()
+                    incCurrMineIdx()
+
+                    if (getCurrMineIdx() > (.25 * randomizedMines.size) && activate()) {
+                        Intent().also { intent ->
+                            intent.action = "xyz.emlyn.hexsweeper.GAME_LOSS"
+                            context.sendBroadcast(intent)
+                        }
+                    }
+
+                    if (randomizedMines[getCurrMineIdx()].mine) {
+                        randomizedMines[getCurrMineIdx()].ucMine = true
+
+                        if (!isKilled()) {
+                            Intent().also { intent ->
+                                intent.action = "xyz.emlyn.hexsweeper.DEC_MINE"
+                                context.sendBroadcast(intent)
+                            }
+                        }
+
+                        if (getCurrMineIdx() < (randomizedMines.size - 1) && !isKilled()) {
+                            showMineHandler.postDelayed(showMineRunnable, 100)
+                        }
+                    } else if (getCurrMineIdx() < (randomizedMines.size - 1) && !isKilled()) {
+                        showMineHandler.post(showMineRunnable)
+                    }
+                }
+            }
+            showMineHandler.post(showMineRunnable)
+
+
+
         } else {
-            val deltaNumHex = uncover(tappedNode, 0)
+            val deltaNumHex = uncover(tappedNode)
             Intent().also { intent ->
                 intent.action = "xyz.emlyn.hexsweeper.CHANGE_HEX"
-                intent.putExtra("deltaHex", deltaNumHex)
+                intent.putExtra("deltaHex", -deltaNumHex)
                 context.sendBroadcast(intent)
             }
         }
@@ -309,8 +369,13 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             val hexIV = ImageView(context)
             hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexagon_border))
             if (nodes[i].flag) {
-                hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexsweep_flag))
+                hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexagon_border_flag))
             }
+            if (nodes[i].ucMine) {
+                hexIV.setImageDrawable(ContextCompat.getDrawable(context,
+                    R.drawable.ic_hexsweep_logo)) //TODO: BEtter icon
+            }
+
 
             val hexIVLP = LayoutParams((nodes[i].width * scaleFactor).toInt(), (nodes[i].height * scaleFactor).toInt())
             hexIVLP.setMargins(trueX.toInt(), trueY.toInt(), 0, 0)
@@ -318,7 +383,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             hexIV.layoutParams = hexIVLP
             addView(hexIV)
 
-            //TODO: Add animation
             if (nodes[i].mineNeighbourCount != null) {
 
                 if (nodes[i].mineNeighbourCount!! == 0) {

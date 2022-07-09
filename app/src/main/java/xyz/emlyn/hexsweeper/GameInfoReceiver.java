@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -80,20 +81,23 @@ public class GameInfoReceiver extends BroadcastReceiver {
                     }
                 });
                 lossOpacityAnim.start();
+                break;
 
             case "xyz.emlyn.hexsweeper.CHANGE_HEX":
-                int deltaHex = intent.getIntExtra("deltaHex", -1);
-                if (deltaHex != -1) {
+                int deltaHex = intent.getIntExtra("deltaHex", -999);
+                if (deltaHex != -999) {
                     TextView numHexTV = fullScreenLayout.findViewById(R.id.hexTV);
                     int existingHex = Integer.parseInt(numHexTV.getText().toString());
                     numHexTV.setText(String.valueOf((existingHex + deltaHex)));
                 }
+                break;
 
-            case "xyz.emlyn.hexsweeper.CHANGE_MINE":
-                int newNumMine = intent.getIntExtra("numMine", -1);
-                if (newNumMine != -1) {
-                    ((TextView) fullScreenLayout.findViewById(R.id.mineTV)).setText(newNumMine);
-                }
+            case "xyz.emlyn.hexsweeper.DEC_MINE":
+                try {
+                    TextView nMineTV = fullScreenLayout.findViewById(R.id.mineTV);
+                    int existingMine = Integer.parseInt(nMineTV.getText().toString());
+                    nMineTV.setText(String.valueOf(existingMine - 1));
+                } catch (NullPointerException ignored) {}
 
         }
     }

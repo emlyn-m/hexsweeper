@@ -9,11 +9,18 @@ import android.content.IntentFilter
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.view.ActionMode
 import kotlin.math.*
 
 class ActivityIngame : AppCompatActivity() {
 
     private lateinit var mBroadcastReceiver : BroadcastReceiver
+    lateinit var outputFL : GameFrameLayout
+
+    override fun onDestroy() {
+        outputFL.killed = true
+        super.onDestroy()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +35,7 @@ class ActivityIngame : AppCompatActivity() {
         filter.addAction("xyz.emlyn.hexsweeper.GAME_WIN")
         filter.addAction("xyz.emlyn.hexsweeper.GAME_LOSS")
         filter.addAction("xyz.emlyn.hexsweeper.CHANGE_HEX")
-        filter.addAction("xyz.emlyn.hexsweeper.CHANGE_MINE")
+        filter.addAction("xyz.emlyn.hexsweeper.DEC_MINE")
         this.registerReceiver(mBroadcastReceiver, filter)
 
         //Get info from bundle
@@ -36,7 +43,7 @@ class ActivityIngame : AppCompatActivity() {
         val numMines : Int = intent.getIntExtra("numMines", -1)
 
         //update indicators
-        findViewById<LinearLayout>(R.id.hexInfoLL).findViewById<TextView>(R.id.hexTV).text = numHex.toString()
+        findViewById<LinearLayout>(R.id.hexInfoLL).findViewById<TextView>(R.id.hexTV).text = (numHex - numMines).toString()
         findViewById<LinearLayout>(R.id.mineInfoLL).findViewById<TextView>(R.id.mineTV).text = numMines.toString()
 
         //For some reason data not properly sent - go back and re-try
@@ -77,7 +84,7 @@ class ActivityIngame : AppCompatActivity() {
         }
 
         //Setup window
-        val outputFL : GameFrameLayout = findViewById(R.id.gameWindowFL)
+        outputFL = findViewById(R.id.gameWindowFL)
         outputFL.nodes = nodes
         outputFL.numRings = numRings
     }

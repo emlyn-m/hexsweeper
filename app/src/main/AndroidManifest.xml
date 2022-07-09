@@ -26,7 +26,7 @@
                 <action android:name="xyz.emlyn.hexsweeper.GAME_WIN"/>
                 <action android:name="xyz.emlyn.hexsweeper.GAME_LOSS"/>
                 <action android:name="xyz.emlyn.hexsweeper.CHANGE_HEX"/>
-                <action android:name="xyz.emlyn.hexsweeper.CHANGE_MINE"/>
+                <action android:name="xyz.emlyn.hexsweeper.DEC_MINE"/>
             </intent-filter>
         </receiver>
 
