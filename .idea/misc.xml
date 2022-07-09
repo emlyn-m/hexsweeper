@@ -3,11 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable/corner_bg.xml" value="0.37743589743589745" />
-        <entry key="app/src/main/res/drawable/ic_hexsweep_flag.xml" value="0.38385416666666666" />
-        <entry key="app/src/main/res/drawable/ic_hexsweep_logo.xml" value="0.38385416666666666" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.39375" />
+        <entry key="app/src/main/res/drawable/corner_bg.xml" value="0.25" />
+        <entry key="app/src/main/res/drawable/hexagon.xml" value="0.221875" />
+        <entry key="app/src/main/res/drawable/ic_hexagon.xml" value="0.38333333333333336" />
+        <entry key="app/src/main/res/drawable/ic_hexagon_border.xml" value="0.33" />
+        <entry key="app/src/main/res/drawable/ic_hexagon_border_dark.xml" value="0.1828125" />
+        <entry key="app/src/main/res/drawable/ic_hexagon_noborder.xml" value="0.38333333333333336" />
+        <entry key="app/src/main/res/drawable/ic_hexsweep_logo.xml" value="0.37743589743589745" />
+        <entry key="app/src/main/res/layout-v26/activity_ingame.xml" value="0.23596014492753623" />
         <entry key="app/src/main/res/layout/activity_ingame.xml" value="0.28351449275362317" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.28351449275362317" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/game_end_overlay.xml" value="0.3671875" />
       </map>
     </option>
   </component>

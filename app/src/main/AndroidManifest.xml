@@ -10,14 +10,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Hexsweeper">
         <activity
+            android:name=".ActivityIngame"
+            android:exported="false" />
+        <activity
             android:name=".MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".GameInfoReceiver"  android:enabled="true" android:exported="false">
+            <intent-filter>
+                <action android:name="xyz.emlyn.hexsweeper.GAME_WIN"/>
+                <action android:name="xyz.emlyn.hexsweeper.GAME_LOSS"/>
+                <action android:name="xyz.emlyn.hexsweeper.CHANGE_HEX"/>
+                <action android:name="xyz.emlyn.hexsweeper.CHANGE_MINE"/>
+            </intent-filter>
+        </receiver>
+
+
     </application>
+
+
 
 </manifest>

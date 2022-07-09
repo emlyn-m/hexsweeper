@@ -1,6 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activityIngameCL"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".ActivityIngame">
+
+    <xyz.emlyn.hexsweeper.GameFrameLayout
+        android:id="@+id/gameWindowFL"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:padding="0dp"
+        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintDimensionRatio="63:71.436"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </xyz.emlyn.hexsweeper.GameFrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mineInfoLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/hexInfoLL">
+
+        <ImageView
+            android:id="@+id/mineIV"
+            android:layout_height="64dp"
+            android:layout_width="64dp"
+            app:srcCompat="@drawable/ic_mine"
+            android:contentDescription="@string/num_mines" />
+
+        <TextView
+            android:id="@+id/mineTV"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/modern_sans"
+            android:textColor="@color/white"
+            android:text="026"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="-5dp"
+            android:textSize="50dp"
+            tools:ignore="SpUsage" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/hexInfoLL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/hexIV"
+            android:layout_height="64dp"
+            android:layout_width="64dp"
+            app:srcCompat="@drawable/ic_hexagon"
+            android:contentDescription="@string/num_mines" />
+
+
+        <TextView
+            android:id="@+id/hexTV"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/modern_sans"
+            android:textColor="@color/white"
+            android:text="382"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="-5dp"
+            android:textSize="50dp"
+            tools:ignore="SpUsage" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

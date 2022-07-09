@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Hexsweeper</string>
+    <string name="num_mines">Number of mines</string>
+
+    <string name="win">WIN</string>
+    <string name="loss">LOSS</string>
 </resources>
