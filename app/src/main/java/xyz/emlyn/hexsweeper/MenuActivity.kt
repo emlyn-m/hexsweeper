@@ -33,7 +33,7 @@ class MenuActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(p0: SeekBar?) {}
         })
 
-        var currNumRings = 2
+        var currNumRings = 6
         val numHexSB : SeekBar = findViewById(R.id.numRingSB)
         val numHexTV : TextView = findViewById(R.id.numHexTV)
         numHexSB.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {

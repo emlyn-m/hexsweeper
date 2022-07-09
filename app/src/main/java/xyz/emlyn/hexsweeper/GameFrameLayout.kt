@@ -75,7 +75,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
                 if (System.currentTimeMillis() - fingerPos[0].third > android.view.ViewConfiguration.getLongPressTimeout()) {
                     triggerLongTap(event)
-                    fingerPos.add(Triple(fingerPos[0].first, fingerPos[0].second, Long.MAX_VALUE)) //prevent re-tap again by setting bullshit time
+                    fingerPos.add(Triple(-Float.MAX_VALUE, -Float.MAX_VALUE, -Long.MAX_VALUE)) //prevent re-tap again by setting bullshit time/pos
                     fingerPos.remove(fingerPos[0])
                     killChildren()
                     drawHex()
