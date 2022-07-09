@@ -13,8 +13,4 @@
         android:strokeColor="@color/grey" android:strokeWidth="5"
         android:pathData="M3,0 L30,0 L40,17.3 L30,34.6 L10,34.6 L0,17.3 L10,0" />
 
-<!--    <path-->
-<!--        android:strokeColor="@color/green" android:strokeWidth="5"-->
-<!--        android:pathData="M31.5,0 L10,0 L0,17.3 L11,36.33" />-->
-
 </vector>
