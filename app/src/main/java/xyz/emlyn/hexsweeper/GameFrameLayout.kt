@@ -13,7 +13,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import kotlin.collections.ArrayList
 import kotlin.math.*
+import kotlin.random.Random
 
 class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(context, attrs) {
 
@@ -28,6 +30,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
     lateinit var nodes : List<HexNode>
     var numRings = 0
 
+    var firstClick = true
     var gameOver = false
     var killed = false
     private fun isKilled() : Boolean { return killed }
@@ -205,6 +208,22 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         //"elvis operator" - Some invalid position
 
         if (tappedNode.mine && !tappedNode.flag) {
+
+            if (firstClick) {  // Cannot die on first click
+                var nextNode : HexNode?
+
+                do {
+                    nextNode = nodes[Random.nextInt(nodes.size)]
+                } while (!nextNode!!.mine)
+                nextNode.mine = true
+                tappedNode.mine = false
+                firstClick = false
+
+                Log.d(debugTag, "hehe")
+
+                return triggerTap(event)
+            }
+
             gameOver = true
 
             var currMineIdx = -1
