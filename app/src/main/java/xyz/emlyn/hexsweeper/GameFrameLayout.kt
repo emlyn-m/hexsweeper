@@ -3,8 +3,9 @@ package xyz.emlyn.hexsweeper
 import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
+import android.os.Handler
+import android.os.Looper
 import android.util.AttributeSet
-import android.util.Log
 import android.view.Gravity
 import android.view.MotionEvent
 import android.widget.FrameLayout
@@ -14,8 +15,6 @@ import androidx.core.content.ContextCompat
 import kotlin.math.*
 
 class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(context, attrs) {
-
-    private val debugTag = "hexsweeper.log"
 
     private val TAP_THRESHOLD_MS = 125
     private val SCALE_WEIGHT = 0.3
@@ -62,6 +61,22 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             MotionEvent.ACTION_DOWN -> {
                 //First finger down
                 addFinger(event)
+
+                val fingerDown = fingerPos[0]
+                Handler(Looper.getMainLooper()).postDelayed({
+                    if (fingerPos.size != 0) {
+                        if (fingerPos[0] == fingerDown) {
+                            triggerLongTap(fingerPos[0])
+                            fingerPos.add(Triple(-555.0f,
+                                -555.0f,
+                                99999L)) //prevent re-tap again by setting bullshit time/pos
+                            fingerPos.remove(fingerPos[0])
+                            killChildren()
+                            drawHex()
+                        }
+                    }
+                }, android.view.ViewConfiguration.getLongPressTimeout().toLong())
+
                 true
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
@@ -72,14 +87,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
                 true
             }
             MotionEvent.ACTION_MOVE -> {
-
-                if (System.currentTimeMillis() - fingerPos[0].third > android.view.ViewConfiguration.getLongPressTimeout()) {
-                    triggerLongTap(event)
-                    fingerPos.add(Triple(-Float.MAX_VALUE, -Float.MAX_VALUE, -Long.MAX_VALUE)) //prevent re-tap again by setting bullshit time/pos
-                    fingerPos.remove(fingerPos[0])
-                    killChildren()
-                    drawHex()
-                }
 
                 if (fingerPos.size == 1) {
                     moveWindow(event)
@@ -158,9 +165,9 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         return newNumCounted
     }
 
-    private fun getTappedNode(event : MotionEvent) : HexNode? {
-        val offsetX = event.x - centerX
-        val offsetY = event.y - centerY
+    private fun getTappedNode(event: Triple<Float, Float, Long>) : HexNode? {
+        val offsetX = event.first - centerX
+        val offsetY = event.second - centerY
 
         val q = (offsetX * 2/3) / scaleFactor
         val r = (offsetX * -1/3 + offsetY * sqrt(3.0)/3) / scaleFactor
@@ -181,10 +188,10 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
     private fun triggerTap(event : MotionEvent) {
 
-        val tappedNode = getTappedNode(event) ?: return;
+        val tappedNode = getTappedNode(Triple(event.x,event.y,event.downTime)) ?: return;
         //"elvis operator" - Some invalid position
 
-        if (tappedNode.mine) {
+        if (tappedNode.mine && !tappedNode.flag) {
             //TODO: Apply mine image to all not-uncovered mines (.1s between each)
 
             Intent().also { intent ->
@@ -217,7 +224,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
 
     }
 
-    private fun triggerLongTap(event : MotionEvent) {
+    private fun triggerLongTap(event: Triple<Float, Float, Long>) {
         val tappedNode = getTappedNode(event) ?: return;
         //"elvis operator" - Some invalid position
         if (tappedNode.mineNeighbourCount == null) {
@@ -302,7 +309,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             val hexIV = ImageView(context)
             hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexagon_border))
             if (nodes[i].flag) {
-                Log.d(debugTag, "ftlag");
                 hexIV.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_hexsweep_flag))
             }
 
