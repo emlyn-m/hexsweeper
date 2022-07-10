@@ -207,7 +207,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
         val tappedNode = getTappedNode(Triple(event.x,event.y,event.downTime)) ?: return
         //"elvis operator" - Some invalid position
 
-        firstClick = false
 
         if (tappedNode.mine && !tappedNode.flag) {
 
@@ -285,7 +284,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             }
         }
 
-
+        firstClick = false
 
         killChildren()
         drawHex()
@@ -299,7 +298,6 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             intent.action = "xyz.emlyn.hexsweeper.GAME_WIN"
             context.sendBroadcast(intent)
         }
-
     }
 
     private fun triggerLongTap(event: Triple<Float, Float, Long>) {
