@@ -35,7 +35,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
     var killed = false
     private fun isKilled() : Boolean { return killed }
 
-    private var fingerPos : ArrayList<Triple<Float, Float, Long>> = ArrayList() // [(posX, posY, ms)]
+    private var fingerPos : ArrayList<Triple<Float, Float, Long>> = ArrayList() // [(posX, posY, start_ms)]
     
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
 
@@ -198,13 +198,13 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
             }
         }
 
-        return tappedNode;
+        return tappedNode
     }
 
 
     private fun triggerTap(event : MotionEvent) {
 
-        val tappedNode = getTappedNode(Triple(event.x,event.y,event.downTime)) ?: return;
+        val tappedNode = getTappedNode(Triple(event.x,event.y,event.downTime)) ?: return
         //"elvis operator" - Some invalid position
 
         firstClick = false
@@ -303,7 +303,7 @@ class GameFrameLayout(context : Context, attrs : AttributeSet) : FrameLayout(con
     }
 
     private fun triggerLongTap(event: Triple<Float, Float, Long>) {
-        val tappedNode = getTappedNode(event) ?: return;
+        val tappedNode = getTappedNode(event) ?: return
         //"elvis operator" - Some invalid position
         if (tappedNode.mineNeighbourCount == null) {
             tappedNode.flag = !(tappedNode.flag)

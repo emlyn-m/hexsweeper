@@ -4,4 +4,6 @@
 
     <string name="win">WIN</string>
     <string name="loss">LOSS</string>
+    <string name="update_channel">Update</string>
+    <string name="update_channel_desc">Update HexSweeper</string>
 </resources>

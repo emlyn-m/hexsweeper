@@ -1,6 +1,7 @@
 package xyz.emlyn.hexsweeper
 
-import kotlin.math.sqrt
+import java.lang.Math.sqrt
+import java.util.*
 
 class HexNode(val q: Int, val r: Int) {
 

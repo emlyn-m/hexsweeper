@@ -1,16 +1,15 @@
 package xyz.emlyn.hexsweeper
 
 import android.content.BroadcastReceiver
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import kotlin.random.Random
 import android.content.IntentFilter
-import android.util.Log
+import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.view.ActionMode
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import java.util.*
 import kotlin.math.*
+import kotlin.random.Random
 
 class ActivityIngame : AppCompatActivity() {
 
