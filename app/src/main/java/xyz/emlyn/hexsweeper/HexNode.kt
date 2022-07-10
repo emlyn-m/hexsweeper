@@ -16,5 +16,5 @@ class HexNode(val q: Int, val r: Int) {
 
     var mine : Boolean = false // Default false
     var flag : Boolean = false
-    var ucMine : Boolean = true
+    var ucMine : Boolean = false
 }
