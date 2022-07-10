@@ -13,9 +13,11 @@
         android:theme="@style/Theme.Hexsweeper">
         <activity
             android:name=".ActivityIngame"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".MenuActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
